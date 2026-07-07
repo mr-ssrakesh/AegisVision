@@ -1,9 +1,9 @@
 torch
 torchvision
-langchain==0.2.14
-langchain-core==0.2.33
-langchain-groq==0.1.9
-streamlit==1.37.1
-python-dotenv==1.0.1
-sentence-transformers==3.0.1
-pillow==10.4.0
+langchain
+langchain-core
+langchain-groq
+streamlit
+python-dotenv
+sentence-transformers
+pillow
