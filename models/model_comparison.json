@@ -1,0 +1,26 @@
+[
+    {
+        "model_name": "RESNET18",
+        "total_params": 11178564,
+        "trainable_params": 2052,
+        "val_acc": 100.0,
+        "train_time_sec": 18.87220089999937,
+        "avg_latency_ms": 23.823822499798553
+    },
+    {
+        "model_name": "EFFICIENTNET_B0",
+        "total_params": 4012672,
+        "trainable_params": 5124,
+        "val_acc": 92.5,
+        "train_time_sec": 19.969566199999463,
+        "avg_latency_ms": 19.68202249991009
+    },
+    {
+        "model_name": "EFFICIENTNET_B1",
+        "total_params": 6518308,
+        "trainable_params": 5124,
+        "val_acc": 100.0,
+        "train_time_sec": 25.758773000001383,
+        "avg_latency_ms": 28.350319999890417
+    }
+]
