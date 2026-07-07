@@ -75,7 +75,6 @@ Open **[http://localhost:8501](http://localhost:8501)** in your browser, upload 
 
 ---
 
-## 📝 Resume Bullet Points (Copy & Paste)
 
 > **Multimodal AI Defect Inspector & Maintenance Planner** | *PyTorch, LangChain, Llama 3.3, ChromaDB/VectorStore, Streamlit*
 > *   **Engineered an end-to-end multimodal pipeline** combining a **supervised PyTorch CNN** (ResNet18) for image classification with a **LangChain RAG agent** for automated reporting and maintenance ticketing.
