@@ -16,17 +16,6 @@ if sys.platform.startswith('win'):
 # Load environment variables
 load_dotenv()
 
-# Check Groq API Key
-groq_api_key = os.getenv("GROQ_API_KEY")
-if not groq_api_key:
-    raise ValueError("GROQ_API_KEY not found in environment variables. Please check your .env file.")
-
-# Initialize the LLM (Using Llama 3.3 for reasoning, Llama 3.1 8B as fallback)
-try:
-    llm = ChatGroq(model="llama-3.3-70b-versatile", groq_api_key=groq_api_key, temperature=0.2)
-except Exception:
-    llm = ChatGroq(model="llama-3.1-8b-instant", groq_api_key=groq_api_key, temperature=0.2)
-
 # ==================== RAG RETRIEVAL ====================
 
 def get_rag_context(defect_class: str) -> str:
@@ -79,11 +68,23 @@ agent_prompt = PromptTemplate.from_template(
     "Write an exhaustive, high-quality plan in clean Markdown format. Do NOT include intro or outro chatter. Output ONLY the raw Markdown report."
 )
 
-agent_chain = agent_prompt | llm | StrOutputParser()
-
 def generate_maintenance_plan(defect_class: str, confidence: float, severity: str) -> str:
     """Execute RAG pipeline and compile the maintenance markdown plan."""
     context = get_rag_context(defect_class)
+    
+    # Check Groq API Key dynamically on invocation
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    if not groq_api_key:
+        raise ValueError("GROQ_API_KEY not found in environment variables. Please check your .env file or enter it in the sidebar.")
+        
+    # Initialize the LLM dynamically
+    try:
+        llm = ChatGroq(model="llama-3.3-70b-versatile", groq_api_key=groq_api_key, temperature=0.2)
+    except Exception:
+        llm = ChatGroq(model="llama-3.1-8b-instant", groq_api_key=groq_api_key, temperature=0.2)
+        
+    # Build the dynamic agent chain
+    agent_chain = agent_prompt | llm | StrOutputParser()
     
     report = agent_chain.invoke({
         "defect_class": defect_class,

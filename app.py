@@ -76,9 +76,32 @@ st.markdown("""
 st.markdown('<h1 class="main-title">🔧 Autonomous Defect Inspector</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Multi-Model Deep Learning Image Classifier (ResNet & EfficientNet) & Generative AI Maintenance Planner (LangChain RAG)</p>', unsafe_allow_html=True)
 
-# Check API Key
+# Sidebar Info & Dynamic API Key input
+api_key_from_env = os.getenv("GROQ_API_KEY")
+
+with st.sidebar:
+    st.header("🔧 Vision \& RAG Auditor")
+    
+    if not api_key_from_env:
+        st.subheader("🔑 API Authentication")
+        user_api_key = st.text_input("Enter Groq API Key:", type="password", help="Get a free key from console.groq.com")
+        if user_api_key:
+            os.environ["GROQ_API_KEY"] = user_api_key
+            st.success("API Key applied locally!")
+            st.rerun()
+        else:
+            st.warning("Please enter your Groq API Key to proceed.")
+            
+    st.write("---")
+    st.write("AegisVision coordinates process safety audits:")
+    st.markdown("- **📷 Visual Inspection**: Multi-model deep learning (ResNet / EfficientNet) classifying surface defects.")
+    st.markdown("- **📄 Maintenance Planner**: RAG pipeline retrieving safety guidelines and compiling Markdown reports.")
+    st.write("---")
+    st.caption("Powered by PyTorch \& LangChain.")
+
+# Check if API key was loaded
 if not os.getenv("GROQ_API_KEY"):
-    st.error("⚠️ `GROQ_API_KEY` not found in environment variables. Please check your `.env` file in the project folder.")
+    st.error("⚠️ Groq API Key is missing. Please enter your `GROQ_API_KEY` in the sidebar to start the app.")
     st.stop()
 
 # Layout: Split screen
