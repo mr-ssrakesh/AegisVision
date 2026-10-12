@@ -77,20 +77,25 @@ def generate_maintenance_plan(defect_class: str, confidence: float, severity: st
     if not groq_api_key:
         raise ValueError("GROQ_API_KEY not found in environment variables. Please check your .env file or enter it in the sidebar.")
         
-    # Initialize the LLM dynamically
-    try:
-        llm = ChatGroq(model="llama-3.3-70b-versatile", groq_api_key=groq_api_key, temperature=0.2)
-    except Exception:
-        llm = ChatGroq(model="llama-3.1-8b-instant", groq_api_key=groq_api_key, temperature=0.2)
-        
-    # Build the dynamic agent chain
-    agent_chain = agent_prompt | llm | StrOutputParser()
+    models_to_try = [
+        "llama-3.1-8b-instant",
+        "llama-3.3-70b-versatile",
+        "openai/gpt-oss-20b"
+    ]
     
-    report = agent_chain.invoke({
-        "defect_class": defect_class,
-        "confidence": confidence,
-        "severity": severity,
-        "rag_context": context
-    })
-    
-    return report
+    last_error = None
+    for model_name in models_to_try:
+        try:
+            llm = ChatGroq(model=model_name, groq_api_key=groq_api_key, temperature=0.2)
+            agent_chain = agent_prompt | llm | StrOutputParser()
+            return agent_chain.invoke({
+                "defect_class": defect_class,
+                "confidence": confidence,
+                "severity": severity,
+                "rag_context": context
+            })
+        except Exception as e:
+            last_error = e
+            continue
+            
+    raise last_error

@@ -14,6 +14,13 @@ from src.agent import generate_maintenance_plan
 # Load environment variables
 load_dotenv()
 
+# Check Streamlit Cloud secrets if available
+try:
+    if "GROQ_API_KEY" in st.secrets and not os.getenv("GROQ_API_KEY"):
+        os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+except Exception:
+    pass
+
 st.set_page_config(
     page_title="AI Defect Inspector & Maintenance Planner",
     page_icon="🔧",
@@ -144,7 +151,7 @@ with col_left:
     if image_to_process is not None:
         # Display image
         img = Image.open(image_to_process)
-        st.image(img, caption="Inspected Component", use_column_width=True)
+        st.image(img, caption="Inspected Component", use_container_width=True)
         
         # Run classification
         with st.spinner("🧠 PyTorch Multi-Model CNN analyzing visual features..."):

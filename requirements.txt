@@ -3,7 +3,7 @@ torchvision
 langchain
 langchain-core
 langchain-groq
-streamlit
+streamlit>=1.39.0
 python-dotenv
 sentence-transformers
 pillow
